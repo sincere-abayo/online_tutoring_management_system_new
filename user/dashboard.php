@@ -45,6 +45,11 @@ function time_ago($timestamp) {
         return ($years == 1) ? "1 year ago" : "$years years ago";
     }
 }
+function countReplies($conn, $comment_id) {
+    $count_sql = "SELECT COUNT(*) as count FROM comments WHERE parent_comment_id = $comment_id";
+    $count_result = $conn->query($count_sql);
+    return $count_result->fetch_assoc()['count'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -170,6 +175,7 @@ function time_ago($timestamp) {
                                  JOIN users u ON c.user_id = u.user_id 
                                  WHERE c.problem_id = " . $row['problem_id'] . " AND c.parent_comment_id IS NULL";
                   $comments_result = $conn->query($comments_sql);
+                  
                   ?>
                   
                       <?php while ($comment_row = $comments_result->fetch_assoc()): ?>
@@ -194,16 +200,48 @@ function time_ago($timestamp) {
                                               <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path></svg>
                                               Like
                                           </button>
-                                          <button onclick="toggleReplyForm(<?= $comment_row['comment_id'] ?>)" class="text-gray-600 hover:text-blue-500 transition duration-300 ease-in-out flex items-center">
-                                              <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path></svg>
-                                              Reply
-                                          </button>
+                                        <!-- Reply Button -->
+                                        <button onclick="toggleReplyForm(<?= $comment_row['comment_id'] ?>)"
+                                            class="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out text-sm">Reply</button>
+                                        <button onclick="toggleReply(<?= $comment_row['comment_id'] ?>)"
+                                            class="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out text-sm">View Reply</button>
+
+                                        <!-- Reply Form (Initially hidden) -->
+                                        <div id="reply-form-<?= $comment_row['comment_id'] ?>" class="hidden mt-4 bg-gray-50 p-4 rounded-lg shadow-sm">
+                                            <form action="add_comment.php" method="post" enctype="multipart/form-data" class="space-y-4">
+                                                <div class="flex items-center space-x-2">
+                                                    <label for="file-input-reply-<?= $comment_row['comment_id'] ?>"
+                                                        class="cursor-pointer bg-white p-2 rounded-full hover:bg-gray-100 transition duration-300">
+                                                        <i class="fa-solid fa-image text-gray-500 hover:text-blue-500 text-xl"></i>
+                                                        <input id="file-input-reply-<?= $comment_row['comment_id'] ?>"
+                                                            name="image" type="file" class="hidden" accept="image/*" />
+                                                    </label>
+                                                    <textarea name="comment" placeholder="Write a reply..."
+                                                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"></textarea>
+                                                </div>
+                                                <input type="hidden" name="parent_comment_id"
+                                                    value="<?= $comment_row['comment_id'] ?>">
+                                                <input type="hidden" name="problem_id" value="<?= $row['problem_id'] ?>">
+                                                <button type="submit"
+                                                    class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Send Reply</button>
+                                            </form>
+                                        </div>
                                       <span class="text-gray-500 text-xs">•<?= time_ago($comment_row['created_at']) ?>•</span>
 
                                       </div>
+
+                                      <?php
+            $reply_count = countReplies($conn, $comment_row['comment_id']);
+            if ($reply_count > 0):
+            ?>
+            <button onclick="toggleReplies(<?= $comment_row['comment_id'] ?>)" class="mt-2 text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out">
+                View Replies (<?= $reply_count ?>)
+            </button>
+            <?php endif; ?>
                                     
                                       <!-- Replies -->
-                                      <div class="replies ml-8 mt-3">
+                                      <div id="replies-<?= $comment_row['comment_id'] ?>" class="replies ml-8 mt-3 hidden">
+               
                                           <?php
                                           $replies_sql = "SELECT r.comment_id, r.comment, r.image_url, u.user_name, u.profile_image, r.created_at, u.user_id 
                                                           FROM comments r 
@@ -362,10 +400,11 @@ function closeImageModal() {
 }
 
 
-        function closeImageModal() {
-            const modal = document.getElementById('imageModal');
-            modal.classList.add('hidden');
-        }
+        
+        function toggleReplies(commentId) {
+        const repliesSection = document.getElementById(`replies-${commentId}`);
+        repliesSection.classList.toggle('hidden');
+    }
     </script>
 </body>
 
