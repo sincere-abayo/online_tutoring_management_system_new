@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Tutoring Platform</title>
+    <!-- Include Tailwind CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <!-- Optional: Include any custom CSS -->
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-blue-500 text-white py-4">
+      <div class="container mx-auto flex justify-between items-center px-4">
+        <h1 class="text-2xl font-bold">Online Tutoring Platform</h1>
+        <div>
+          <a href="login.php" class="text-white">Login</a>
+          <a href="signup.php" class="text-white">Signup</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero bg-gray-800 text-white py-20">
+      <div
+        class="container mx-auto flex flex-col items-center justify-center text-center px-4"
+      >
+        <h2 class="text-4xl font-bold mb-4">
+          Welcome to Our Online Tutoring Platform
+        </h2>
+        <p class="text-lg mb-8">
+          Get expert help from tutors in various fields. Solve your academic
+          problems effectively!
+        </p>
+        <a
+          href="#how-it-works"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md text-lg font-semibold transition duration-300"
+          >Learn How It Works</a
+        >
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-8 text-center">How It Works</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Step 1 -->
+          <div class="bg-white shadow-md rounded-lg p-6">
+            <h3 class="text-xl font-bold mb-4">Post Your Problem</h3>
+            <p class="text-gray-700 mb-4">
+              Describe your problem or question in detail. Attach relevant files
+              if necessary.
+            </p>
+            <img
+              src="image/image1.jpg"
+              alt="Post Problem"
+              class="mx-auto h-32"
+            />
+          </div>
+          <!-- Step 2 -->
+          <div class="bg-white shadow-md rounded-lg p-6">
+            <h3 class="text-xl font-bold mb-4">Get Expert Responses</h3>
+            <p class="text-gray-700 mb-4">
+              Our experts will review your problem and provide detailed
+              solutions or explanations.
+            </p>
+            <img
+              src="image/image2.png"
+              alt="Expert Response"
+              class="mx-auto h-32"
+            />
+          </div>
+          <!-- Step 3 -->
+          <div class="bg-white shadow-md rounded-lg p-6">
+            <h3 class="text-xl font-bold mb-4">Schedule Appointments</h3>
+            <p class="text-gray-700 mb-4">
+              Schedule video conference appointments with tutors for in-depth
+              discussions.
+            </p>
+            <img
+              src="image/image3.jpg"
+              alt="Schedule Appointment"
+              class="mx-auto h-32"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4">
+      <div class="container mx-auto text-center">
+        &copy; 2024 Online Tutoring Platform. All rights reserved.
+      </div>
+    </footer>
+  </body>
+</html>
