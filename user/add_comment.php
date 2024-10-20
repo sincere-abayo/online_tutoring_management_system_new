@@ -1,6 +1,8 @@
 <?php
 include 'db.php';
 
+header('Content-Type: application/json');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $comment = $_POST['comment'];
     $problem_id = $_POST['problem_id'];
@@ -29,14 +31,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Execute the query and check if it was successful
     if ($stmt->execute()) {
-        header('Location: dashboard.php?problem_id=' . $problem_id); // Redirect back to the problem page or dashboard
-        exit();
+        echo json_encode(['success' => true]);
     } else {
-        echo "Error: " . $conn->error;
+        echo json_encode(['success' => false, 'error' => $conn->error]);
     }
 
     // Close the statement and connection
     $stmt->close();
     $conn->close();
+    exit();
 }
 ?>

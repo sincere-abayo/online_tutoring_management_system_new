@@ -1,7 +1,7 @@
 <?php
 include 'db.php'; // Include the database connection
+include 'session.php'; // Include the session
 include 'navbar.php'; // Include the navigation bar
-
 // Fetch problems 
 $sort = $_GET['sort'] ?? 'all';
 $sql = "SELECT p.problem_id, p.description, p.email, p.contact, p.status, u.user_name, pc.category_name 
@@ -153,20 +153,21 @@ function countReplies($conn, $comment_id) {
                 </a>
             </div>
             <!-- Add Comment Section (Initially hidden) -->
-            <div id="add-comment-<?= $row['problem_id'] ?>" class="hidden mt-4">
-            <form id="commentForm_<?php echo  $row['problem_id']; ?>" onsubmit="submitComment(event, 'commentForm_<?php echo $problem_id; ?>')" enctype="multipart/form-data">
+            <div id="add-comment-<?= $row['problem_id'] ?>" class="hidden mt-4"> 
+    <form id="commentForm_<?= $row['problem_id']; ?>" onsubmit="submitComment(event, 'commentForm_<?= $row['problem_id']; ?>')" enctype="multipart/form-data">
+        <div class="flex items-center mb-2">
+            <label for="file-input-<?= $row['problem_id'] ?>" class="cursor-pointer">
+                <i class="fa-solid fa-image text-gray-500 hover:text-blue-500 text-xl"></i>
+                <input id="file-input-<?= $row['problem_id'] ?>" name="image" type="file" class="hidden" accept="image/*" />
+            </label>
+            <textarea name="comment" placeholder="Add your comment here..." class="w-full px-3 py-2 border rounded-md ml-2"></textarea>
+        </div>
+        <input type="hidden" name="problem_id" value="<?= $row['problem_id'] ?>">
+        <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded-md">Send</button>
+    </form>
+    <div id="commentMessage_<?= $row['problem_id'] ?>" class="mt-2 text-sm"></div> <!-- This div is for displaying messages -->
+</div>
 
-                    <div class="flex items-center mb-2">
-                        <label for="file-input-<?= $row['problem_id'] ?>" class="cursor-pointer">
-                            <i class="fa-solid fa-image text-gray-500 hover:text-blue-500 text-xl"></i>
-                            <input id="file-input-<?= $row['problem_id'] ?>" name="image" type="file" class="hidden" accept="image/*" />
-                        </label>
-                        <textarea name="comment" placeholder="Add your comment here..." class="w-full px-3 py-2 border rounded-md ml-2"></textarea>
-                    </div>
-                    <input type="hidden" name="problem_id" value="<?= $row['problem_id'] ?>">
-                    <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded-md">Send</button>
-                </form>
-            </div>
               <!-- Comments Section (Initially hidden) -->
               <div id="comments-<?= $row['problem_id'] ?>" class="hidden mt-4">
               <h4 class="font-semibold text-gray-700 mb-2">Comments</h4>
@@ -227,18 +228,20 @@ $like_color = $user_liked ? 'text-blue-500' : 'text-gray-600';
 
                 <div class="mt-4">
                     <div id="reply-form-<?= $comment_row['comment_id'] ?>" class="hidden mt-4 bg-gray-50 p-4 rounded-lg shadow-md">
-                        <form action="add_comment.php" method="post" enctype="multipart/form-data" class="space-y-3">
-                            <div class="flex items-start space-x-2">
-                                <label for="file-input-reply-<?= $comment_row['comment_id'] ?>" class="cursor-pointer bg-white p-2 rounded-full hover:bg-gray-100 transition duration-300">
-                                    <i class="fa-solid fa-image text-gray-500 hover:text-blue-500 text-xl"></i>
-                                    <input id="file-input-reply-<?= $comment_row['comment_id'] ?>" name="image" type="file" class="hidden" accept="image/*" />
-                                </label>
-                                <textarea name="comment" placeholder="Write a reply..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"></textarea>
-                            </div>
-                            <input type="hidden" name="parent_comment_id" value="<?= $comment_row['comment_id'] ?>">
-                            <input type="hidden" name="problem_id" value="<?= $row['problem_id'] ?>">
-                            <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Send Reply</button>
-                        </form>
+                    <form id="replyForm_<?= $comment_row['comment_id']; ?>" onsubmit="submitReply(event, 'replyForm_<?= $comment_row['comment_id']; ?>')" enctype="multipart/form-data" class="space-y-3">
+    <div class="flex items-start space-x-2">
+        <label for="file-input-reply-<?= $comment_row['comment_id'] ?>" class="cursor-pointer bg-white p-2 rounded-full hover:bg-gray-100 transition duration-300">
+            <i class="fa-solid fa-image text-gray-500 hover:text-blue-500 text-xl"></i>
+            <input id="file-input-reply-<?= $comment_row['comment_id'] ?>" name="image" type="file" class="hidden" accept="image/*" />
+        </label>
+        <textarea name="comment" placeholder="Write a reply..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"></textarea>
+    </div>
+    <input type="hidden" name="parent_comment_id" value="<?= $comment_row['comment_id'] ?>">
+    <input type="hidden" name="problem_id" value="<?= $row['problem_id'] ?>">
+    <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Send Reply</button>
+</form>
+<div id="replyMessage_<?= $comment_row['comment_id']; ?>" class="mt-2 text-sm"></div> <!-- Div for displaying success/error messages -->
+
                     </div>
                     
                     <?php
@@ -246,7 +249,7 @@ $like_color = $user_liked ? 'text-blue-500' : 'text-gray-600';
                     if ($reply_count > 0):
                     ?>
                     <button onclick="toggleReplies(<?= $comment_row['comment_id'] ?>)" class="mt-2 text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out">
-                        View Replies (<?= $reply_count ?>)
+                        View Replies (<span id="replays_<?php echo $comment_row['comment_id']?>"><?= $reply_count ?></span>)
                     </button>
                     <?php endif; ?>
                     
@@ -479,13 +482,12 @@ function closeImageModal() {
         console.error('Error:', error);
     });
 }
-
 function submitComment(event, formId) {
     event.preventDefault();
     const form = document.getElementById(formId);
     const formData = new FormData(form);
     const problemId = formId.split('_')[1];
-
+    const messageDiv = document.getElementById(`commentMessage_${problemId}`);
 
     fetch('add_comment.php', {
         method: 'POST',
@@ -494,21 +496,50 @@ function submitComment(event, formId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            console.log('Comment added successfully');
-            // Clear the form
+            messageDiv.innerHTML = '<p class="text-green-500">Comment added successfully!</p>';
             form.reset();
-            // Optionally, update the UI to show the new comment
-            // For example, you can reload the comments or append the new comment to the list
-            // You might want to reload the comments or append the new comment to the list
+            // reload after 2 sec
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+            // Optionally, update the UI to show the new comment here
         } else {
-            console.error('Error adding comment:', data.error);
+            messageDiv.innerHTML = `<p class="text-red-500">Error: ${data.error}</p>`;
         }
     })
     .catch(error => {
-        console.error('Error:', error);
+        messageDiv.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
     });
 }
- 
+
+function submitReply(event, formId) {
+    event.preventDefault();
+    const form = document.getElementById(formId);
+    const formData = new FormData(form);
+    const commentId = formId.split('_')[1];
+    const messageDiv = document.getElementById(`replyMessage_${commentId}`);
+
+    fetch('add_comment.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            messageDiv.innerHTML = '<p class="text-green-500">Reply added successfully!</p>';
+            form.reset();
+            setTimeout(() => {
+                location.reload();
+            }, 2000);
+        } else {
+            messageDiv.innerHTML = `<p class="text-red-500">Error: ${data.error}</p>`;
+        }
+    })
+    .catch(error => {
+        messageDiv.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+    });
+}
+
     </script>
 </body>
 

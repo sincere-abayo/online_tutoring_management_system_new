@@ -1,5 +1,4 @@
 <?php
-session_start();
 require 'user/db.php'; // Include your database connection
 
 // Initialize variables for error messages
