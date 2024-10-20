@@ -1,7 +1,4 @@
 <?php
-// Start the session
-session_start();
-
 // Include the database connection
 include 'db.php';
 
@@ -67,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             // Success, redirect to the dashboard
-            header('Location: dashboard.php');
+            header('Location: my_problem.php');
             exit;
         } else {
             $error = "Error: " . $stmt->error;
@@ -79,6 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = "Invalid phone number format. Please use the format: 732 286 284.";
     }
 }
+$problem_category_sql= "SELECT * from problem_categories";
+$problem_category_result = mysqli_query($conn, $problem_category_sql);
 
 
 // Include the navbar
@@ -87,7 +86,6 @@ include 'navbar.php';
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -95,86 +93,79 @@ include 'navbar.php';
     <script src="../js/tailwind.js"></script>
     <link href="styles.css" rel="stylesheet">
 </head>
+<body class="bg-gray-100">
 
-<body>
-    <!-- Main Content -->
     <div class="container mx-auto mt-8 px-4">
-        <div class="bg-white shadow-md rounded-lg p-8 max-w-md mx-auto">
-            <h2 class="text-2xl font-bold mb-6 text-center">Post a Problem</h2>
+        <div class="bg-white shadow-lg rounded-lg p-8 max-w-2xl mx-auto">
+            <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Post a Problem</h2>
 
             <?php if (isset($error)): ?>
-                <div class="bg-red-100 text-red-700 p-4 mb-4 rounded">
-                    <?= $error ?>
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+                    <p class="font-bold">Error</p>
+                    <p><?= $error ?></p>
                 </div>
             <?php endif; ?>
 
-            <!-- Problem Posting Form -->
-            <form action="" method="POST" enctype="multipart/form-data">
-                <!-- Hidden field for User ID -->
-                <input type="hidden" id="user_id" name="user_id" value="<?= $user_id ?>">
+            <form action="" method="POST" enctype="multipart/form-data" class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+    <input type="hidden" id="user_id" name="user_id" value="<?= $user_id ?>">
 
-                <div class="mb-4">
-                    <label for="category" class="block text-gray-700 font-bold mb-2">Category</label>
-                    <select id="category" name="category"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                        required>
-                        <option value="">Select a category</option>
-                        <option value="1">Information Technology (IT) and Software Development</option>
-                        <option value="2">Data Science, Analytics, and AI</option>
-                        <option value="3">Cybersecurity and Database Management</option>
-                        <option value="4">Digital Media and Marketing</option>
-                    </select>
-                </div>
+    <!-- Category -->
+    <div>
+        <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+        <select id="category" name="category" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" required>
+            <option value="" disabled selected>Select a category</option>
+            <?php while ($row = mysqli_fetch_assoc($problem_category_result)): ?>
+                <option value="<?= $row['category_id'] ?>"><?= $row['category_name'] ?></option>
+            <?php endwhile; ?>
+           
+        </select>
+    </div>
 
-                <div class="mb-4">
-                    <label for="description" class="block text-gray-700 font-bold mb-2">Description</label>
-                    <textarea id="description" name="description" rows="4"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 resize-none"
-                        maxlength="500" placeholder="Approx. 50 words" required></textarea>
-                    <p class="text-gray-500 text-xs mt-1">Maximum 500 characters (approx. 50 words).</p>
-                </div>
+    <!-- Description -->
+    <div>
+        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <textarea id="description" name="description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 resize-none" maxlength="500" placeholder="Describe your problem (approx. 50 words)" required></textarea>
+        <p class="text-gray-500 text-xs mt-1">Maximum 500 characters (approx. 50 words).</p>
+    </div>
 
-                <div class="mb-4">
-                    <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>
-                    <input type="email" id="email" name="email" value="<?= $user_email ?>"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                        required>
-                </div>
+    <!-- Email -->
+    <div>
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <input type="email" id="email" name="email" value="<?= $user_email ?>" readonly class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 bg-gray-100 cursor-not-allowed" required>
+    </div>
 
-                <div class="mb-4">
-                    <label for="phone" class="block text-gray-700 font-bold mb-2">Phone Contact</label>
-                    <div class="flex">
-                        <!-- Country code dropdown -->
-                        <select id="country_code" name="country_code"
-                            class="w-1/4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500">
-                            <option value="250">+250 Rwanda</option>
-                            <option value="254">+254 Kenya</option>
-                            <option value="255">+255 Tanzania</option>
-                            <option value="256">+256 Uganda</option>
-                        </select>
-                        <!-- Phone number input -->
-                        <input type="tel" id="phone" name="phone"
-                            class="w-3/4 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 ml-2"
-                            placeholder="732 286 284" required>
-                    </div>
-                    <small class="text-gray-500">Phone number should be in the format: 732 286 284</small>
-                </div>
-                <div class="mb-4">
-                    <label for="images" class="block text-gray-700 font-bold mb-2">Upload Images</label>
-                    <input type="file" id="images" name="images[]"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-                        multiple>
-                    <small class="text-gray-500">You can upload multiple images (JPEG, PNG).</small>
-                </div>
+    <!-- Phone Contact -->
+    <div>
+        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Contact</label>
+        <div class="flex">
+            <select id="country_code" name="country_code" class="w-1/3 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+                <option value="250">+250 Rwanda</option>
+                <option value="254">+254 Kenya</option>
+                <option value="255">+255 Tanzania</option>
+                <option value="256">+256 Uganda</option>
+            </select>
+            <input type="tel" id="phone" name="phone" class="w-2/3 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" placeholder="732 286 284" required>
+        </div>
+        <p class="text-gray-500 text-xs mt-1">Phone number format: 732 286 284</p>
+    </div>
 
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md w-full hover:bg-blue-600">Post
-                    Problem</button>
-            </form>
+    <!-- Image Upload -->
+    <div>
+        <label for="images" class="block text-sm font-medium text-gray-700 mb-1">Upload Images</label>
+        <input type="file" id="images" name="images[]" multiple accept="image/jpeg, image/png" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+        <p class="text-gray-500 text-xs mt-1">You can upload multiple images (JPEG, PNG).</p>
+    </div>
 
-            <p class="text-gray-600 text-sm mt-4 text-center">Return to <a href="dashboard.php"
-                    class="text-blue-500 hover:underline">Home</a></p>
+    <!-- Submit Button -->
+    <button type="submit" class="w-full bg-blue-500 text-white px-4 py-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">Post Problem</button>
+</form>
+
+
+            <p class="text-gray-600 text-sm mt-6 text-center">Return to <a href="dashboard.php" class="text-blue-500 hover:underline">Home</a></p>
         </div>
     </div>
+
+
 
     <!-- JavaScript for phone number formatting and validation -->
     <script>

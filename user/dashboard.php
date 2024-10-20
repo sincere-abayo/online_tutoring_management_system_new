@@ -58,7 +58,7 @@ function countReplies($conn, $comment_id) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expert Dashboard - Online Tutoring Platform</title>
+    <title>Expert Dashboard - Online Tutoring Management System</title>
     <script src="../js/tailwind.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -221,7 +221,6 @@ $like_color = $user_liked ? 'text-blue-500' : 'text-gray-600';
                     <!-- </form> -->
                     
                     <button onclick="toggleReplyForm(<?= $comment_row['comment_id'] ?>)" class="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out text-sm">Reply</button>
-                    <button onclick="toggleReply(<?= $comment_row['comment_id'] ?>)" class="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out text-sm">View Reply</button>
                     
                     <span class="text-gray-500 text-xs">• <?= time_ago($comment_row['created_at']) ?> •</span>
                 </div>

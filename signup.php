@@ -1,5 +1,4 @@
 <?php
-session_start();  // Start the session
 require 'user/db.php'; // Include your database connection
 
 // Error message container
