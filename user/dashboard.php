@@ -90,25 +90,25 @@ function time_ago($timestamp) {
 </head>
 
 <body>
-    <div class="container mx-auto my-8 px-4">
+    <div class=" md:mx-10 mx-5 my-8 px-4">
         <h2 class="text-2xl font-bold mb-6">Posted Problems</h2>
         <form action="" method="get" class="mb-6">
             <label for="sort" class="block font-bold mb-2">Sort By</label>
-            <select id="sort" name="sort" class="px-3 py-2 border rounded-md" onchange="this.form.submit()">
+            <select id="sort" name="sort" class="px-3 py-2 w-96 border bg-gray-900 focus:outline-none text-white rounded-md border-2 border-sky-400" onchange="this.form.submit()">
                 <option value="all" <?= $sort == 'all' ? 'selected' : '' ?>>All Problems</option>
                 <option value="pending" <?= $sort == 'pending' ? 'selected' : '' ?>>Pending</option>
                 <option value="solved" <?= $sort == 'solved' ? 'selected' : '' ?>>Solved</option>
             </select>
         </form>
 
-       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
     <?php while ($row = $result->fetch_assoc()): ?>
-        <div class="bg-white shadow-md rounded-lg p-4">
-            <h3 class="text-lg font-bold"><?= htmlspecialchars($row['category_name']) ?></h3>
-            <p class="text-gray-700"><?= htmlspecialchars($row['description']) ?></p>
-            <p class="text-gray-600">Email: <?= htmlspecialchars($row['email']) ?></p>
-            <p class="text-gray-600">Contact: <?= htmlspecialchars($row['contact']) ?></p>
-            <p class="text-gray-600">Status: <?= htmlspecialchars($row['status']) ?></p>
+        <div class="bg-gray-950 shadow-md rounded-lg p-4">
+            <h3 class="text-lg  text-sky-300 font-bold"><?= htmlspecialchars($row['category_name']) ?></h3>
+            <p class="text-gray-300"><?= htmlspecialchars($row['description']) ?></p>
+            <p class="text-gray-400">Email: <?= htmlspecialchars($row['email']) ?></p>
+            <p class="text-gray-400">Contact: <?= htmlspecialchars($row['contact']) ?></p>
+            <p class="text-gray-400">Status: <?= htmlspecialchars($row['status']) ?></p>
 
             <div class="mt-4 flex flex-wrap items-center gap-4">
                 <?php
