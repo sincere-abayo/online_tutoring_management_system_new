@@ -1,5 +1,15 @@
   <body class="bg-gray-900 flex flex-col min-h-screen">
     <!-- Navigation -->
+     <?php 
+     
+    //  get user profile picture
+    $user_id = $_SESSION['user_id'];
+    $sql = "SELECT * FROM users WHERE user_id = '$user_id'";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $profile_image = $row['profile_image'];
+    
+     ?>
     <nav class="bg-gray-900 text-white border-b border-gray-500 py-4 sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center px-4">
             <h1 class="text-2xl font-bold">Online Tutoring Management System (OTMS)</h1>
@@ -10,7 +20,7 @@
                 <a href="../logout.php" class="text-sky-400 hover:text-blue-200">Logout</a>
                 <!-- Profile Image -->
                 <img
-                    src="https://via.placeholder.com/40"
+                    src="../image/<?php echo $profile_image ?>"
                     alt="Profile"
                     class="w-10 h-10 rounded-full object-cover cursor-pointer"
                     onclick="sendToProfile()"

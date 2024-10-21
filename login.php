@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Redirect to the dashboard with success message
                 echo "<script>
-                    alert('Login successful! Redirecting to your dashboard...');
+                   
                     window.location.href = 'user/dashboard.php';
                 </script>";
                 exit();
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md w-full hover:bg-blue-600">Login</button>
       </form>
-      <p class="text-gray-600 text-sm mt-4 text-center">Don't have an account? <a href="user_signup.php" class="text-blue-500 hover:underline">Sign up</a></p>
+      <p class="text-gray-600 text-sm mt-4 text-center">Don't have an account? <a href="signup.php" class="text-blue-500 hover:underline">Sign up</a></p>
     </div>
   </div>
 

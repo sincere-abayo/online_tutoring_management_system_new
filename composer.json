@@ -1,0 +1,6 @@
+{
+    "require": {
+        "secondtruth/startmin": "^1.2",
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
