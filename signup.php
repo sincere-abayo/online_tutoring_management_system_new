@@ -79,19 +79,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <link href="styles.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-  <!-- Navigation -->
-  <nav class="bg-blue-500 text-white py-4">
-    <div class="container mx-auto flex justify-between items-center px-4">
-      <h1 class="text-2xl font-bold">Online Tutoring Platform</h1>
-      <a href="index.html" class="text-white">Home</a>
-    </div>
-  </nav>
+
 
   <!-- Main Content -->
-  <div class="container mx-auto flex justify-center items-center h-screen">
+  <div class="container md:mx-auto mx-5 flex justify-center items-center h-screen">
     <!-- Signup Form -->
-    <div class="bg-white shadow-md rounded-lg p-8 max-w-sm w-full">
-      <h2 class="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+    <div class="bg-white shadow-md rounded-lg p-8  md:w-1/2 w-full">
+
+        
+    <div class="text-center">
+      <h1 class="text-xl font-semibold text-blue-800 text-center">Online Tutoring Platform</h1>
+      </div>
+
+      <h2 class="text-xl font-medium my-4 text-center">Sign Up</h2>
+  
       <!-- Display errors if there are any -->
       <?php if (!empty($errors)): ?>
         <div id="error-container" class="text-red-500 mb-4">
@@ -101,30 +102,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
       <?php endif; ?>
       <form id="signup-form" action="" method="post" enctype="multipart/form-data">
-        <div class="mb-4">
-          <label for="signup-username" class="block text-gray-700 font-bold mb-2">Username</label>
-          <input type="text" id="signup-username" name="username" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required>
+
+      <div class="grid  grid-cols-1 md:grid-cols-2 gap-5">
+
+
+        <div class="mb-1">
+          <label for="signup-username" class="block text-black ">Username <span class="text-red-500">*</span> </label>
+          <input type="text" id="signup-username" name="username" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required placeholder="Enter your username">
         </div>
-        <div class="mb-4">
-          <label for="signup-email" class="block text-gray-700 font-bold mb-2">Email</label>
-          <input type="email" id="signup-email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required>
+        <div class="mb-1">
+          <label for="signup-email" class="block text-black ">Email <span class="text-red-500">*</span> </label>
+          <input type="email" id="signup-email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required placeholder="Enter your email">
         </div>
-        <div class="mb-4">
-          <label for="signup-password" class="block text-gray-700 font-bold mb-2">Password</label>
-          <input type="password" id="signup-password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required>
+        <div class="mb-1">
+          <label for="signup-password" class="block text-black ">Password <span class="text-red-500">*</span> </label>
+          <input type="password" id="signup-password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required placeholder="Enter your password">
         </div>
-        <div class="mb-6">
-          <label for="signup-confirm-password" class="block text-gray-700 font-bold mb-2">Confirm Password</label>
-          <input type="password" id="signup-confirm-password" name="confirm-password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required>
+        <div class="mb-1">
+          <label for="signup-confirm-password" class="block text-black ">Confirm Password <span class="text-red-500">*</span> </label>
+          <input type="password" id="signup-confirm-password" name="confirm-password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required placeholder="Confirm your password">
           <p id="error-message" class="text-red-500 mt-2 hidden">Passwords do not match.</p>
         </div>
-        <div class="mb-4">
-          <label for="profile-image" class="block text-gray-700 font-bold mb-2">Profile Image</label>
+        <div class="mb-1">
+          <label for="profile-image" class="block text-black ">Profile Image <span class="text-red-500">*</span> </label>
           <input type="file" id="profile-image" name="profileImage" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required>
         </div>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md w-full hover:bg-blue-600">Sign Up</button>
+        <div class="md:col-span-2 ">
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md w-full hover:bg-blue-600">Sign Up</button>
+        </div>
+
+        </div>
       </form>
-      <p class="text-gray-600 text-sm mt-4 text-center">Already have an account? <a href="user_login.php" class="text-blue-500 hover:underline">Login</a></p>
+      <p class="text-gray-600 text-sm mt-4 text-center">Already have an account? <a href="login.php" class="text-blue-500 hover:underline">Login</a></p>
+      <p class="text-gray-600 text-sm mt-4 text-center"> <a href="login.php" class="text-blue-500 hover:underline">Back to Home</a></p>
     </div>
   </div>
 

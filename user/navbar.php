@@ -1,13 +1,13 @@
-  <body class="bg-gray-900 flex flex-col min-h-screen">
+  <body class="bg-gray-200 flex flex-col min-h-screen">
     <!-- Navigation -->
-    <nav class="bg-gray-900 text-white border-b border-gray-500 py-4 sticky top-0 z-50">
+    <nav class="bg-blue-700 text-white  py-4 sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center px-4">
             <h1 class="text-2xl font-bold">Online Tutoring Management System (OTMS)</h1>
             <div class="flex items-center space-x-4">
-                <a href="dashboard.php" class="text-sky-400 hover:text-blue-200">Home</a>
-                <a href="my_problem.php" class="text-sky-400 hover:text-blue-200">My Problems</a>
-                <a href="problem.php" class="text-sky-400 hover:text-blue-200">Post Problem</a>
-                <a href="../logout.php" class="text-sky-400 hover:text-blue-200">Logout</a>
+                <a href="dashboard.php" class="text-white">Home</a>
+                <a href="my_problem.php" class="text-white">My Problems</a>
+                <a href="problem.php" class="text-white">Post Problem</a>
+                <a href="../logout.php" class="text-white">Logout</a>
                 <!-- Profile Image -->
                 <img
                     src="https://via.placeholder.com/40"

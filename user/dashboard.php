@@ -97,23 +97,26 @@ function countReplies($conn, $comment_id) {
 <body>
     <div class=" md:mx-10 mx-5 my-8 px-4">
         <h2 class="text-2xl font-bold mb-6">Posted Problems</h2>
+
+        <div class=" ">
         <form action="" method="get" class="mb-6">
-            <label for="sort" class="block font-bold mb-2">Sort By</label>
-            <select id="sort" name="sort" class="px-3 py-2 w-96 border bg-gray-900 focus:outline-none text-white rounded-md border-2 border-sky-400" onchange="this.form.submit()">
+            <label for="sort" class="block font-bold mb-2 ">Sort By</label>
+            <select id="sort" name="sort" class="px-3 py-2 w-96 border focus:outline-none  rounded-md border-2" onchange="this.form.submit()">
                 <option value="all" <?= $sort == 'all' ? 'selected' : '' ?>>All Problems</option>
                 <option value="pending" <?= $sort == 'pending' ? 'selected' : '' ?>>Pending</option>
                 <option value="solved" <?= $sort == 'solved' ? 'selected' : '' ?>>Solved</option>
             </select>
         </form>
+        </div>
 
-       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     <?php while ($row = $result->fetch_assoc()): ?>
-        <div class="bg-gray-950 shadow-md rounded-lg p-4">
-            <h3 class="text-lg  text-sky-300 font-bold"><?= htmlspecialchars($row['category_name']) ?></h3>
-            <p class="text-gray-300"><?= htmlspecialchars($row['description']) ?></p>
-            <p class="text-gray-400">Email: <?= htmlspecialchars($row['email']) ?></p>
-            <p class="text-gray-400">Contact: <?= htmlspecialchars($row['contact']) ?></p>
-            <p class="text-gray-400">Status: <?= htmlspecialchars($row['status']) ?></p>
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <h3 class="text-lg  text-blue-800 font-bold"><?= htmlspecialchars($row['category_name']) ?></h3>
+            <p class="text-black"><?= htmlspecialchars($row['description']) ?></p>
+            <p class="text-black"> <span class="font-medium" >  Email:  </span> <?= htmlspecialchars($row['email']) ?></p>
+            <p class="text-black"> <span class="font-medium" >  Contact: </span>  <?= htmlspecialchars($row['contact']) ?></p>
+            <p class="text-black"> <span class="font-medium" >  Status: </span>  <?= htmlspecialchars($row['status']) ?></p>
 
             <div class="mt-4 flex flex-wrap items-center gap-4">
                 <?php

@@ -60,37 +60,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="styles.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-  <!-- Navigation -->
-  <nav class="bg-blue-500 text-white py-4">
-    <div class="container mx-auto flex justify-between items-center px-4">
-      <h1 class="text-2xl font-bold">Online Tutoring Platform</h1>
-      <a href="index.html" class="text-white">Home</a>
-    </div>
-  </nav>
+
 
   <!-- Main Content -->
-  <div class="container mx-auto flex justify-center items-center h-screen">
-    <!-- Login Form -->
-    <div class="bg-white shadow-md rounded-lg p-8 max-w-sm w-full">
-      <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
-      <?php if (!empty($error)) : ?>
-        <div id="error-message" class="text-red-500 mb-4"><?php echo $error; ?></div>
-      <?php endif; ?>
-      <form id="login-form" method="POST" action="">
-        <div class="mb-4">
-          <label for="login-email" class="block text-gray-700 font-bold mb-2">Email</label>
-          <input type="email" id="login-email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required>
+  <div class="container mx-auto flex justify-center items-center min-h-screen bg-gray-100 px-4 py-8">
+    <!-- Login Form and Image -->
+    <div class="flex flex-col md:flex-row items-center bg-white shadow-md rounded-lg p-8 md:w-1/2 w-full ">
+      <div class="mb-8 md:mb-0 md:mr-8 w-full md:w-1/2">
+        <img src="image/login.avif" alt="Login" class=" w-full max-w-md mx-auto">
+        <div class="mt-4 text-center">
+          <a href="index.php" class=" hover:text-blue-400 text-blue-800 font-medium py-2 px-4 rounded">
+            Back to Home
+          </a>
         </div>
-        <div class="mb-6">
-          <label for="login-password" class="block text-gray-700 font-bold mb-2">Password</label>
-          <input type="password" id="login-password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" required>
-        </div>
-        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md w-full hover:bg-blue-600">Login</button>
-      </form>
-      <p class="text-gray-600 text-sm mt-4 text-center">Don't have an account? <a href="user_signup.php" class="text-blue-500 hover:underline">Sign up</a></p>
+      </div>
+      <div class="w-full md:w-1/2">
+      <h1 class="text-xl font-semibold text-blue-800 text-center">Online Tutoring Platform</h1>
+        <h2 class="text-xl font-medium my-4 text-center">Login</h2>
+        <?php if (!empty($error)) : ?>
+          <div id="error-message" class="text-red-500 mb-4"><?php echo $error; ?></div>
+        <?php endif; ?>
+        <form id="login-form" method="POST" action="">
+          <div class="mb-2">
+            <label for="login-email" class="block text-black">Email <span class="text-red-500">*</span></label>
+            <input type="email" id="login-email" name="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" placeholder="Email" required>
+          </div>
+          <div class="mb-2">
+            <label for="login-password" class="block text-black">Password <span class="text-red-500">*</span></label>
+            <input type="password" id="login-password" name="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" placeholder="Password" required>
+          </div>
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md w-full hover:bg-blue-600">Login</button>
+        </form>
+        <p class="text-gray-600 text-sm mt-4 text-center">Don't have an account? <a href="signup.php" class="text-blue-500 hover:underline">Sign up</a></p>
+      </div>
     </div>
   </div>
-
   <!-- Footer -->
   <footer class="bg-gray-200 text-gray-600 py-4 mt-8">
     <div class="container mx-auto text-center">
