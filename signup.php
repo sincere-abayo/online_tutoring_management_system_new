@@ -1,4 +1,8 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'vendor/autoload.php';
+
 require 'user/db.php'; // Include your database connection
 
 // Error message container
@@ -31,39 +35,70 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Email is already registered. Please log in.";
     }
 
-    // If no errors, proceed with registration
-    if (empty($errors)) {
-        // Hash the password
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+   // If no errors, proceed with registration
+if (empty($errors)) {
+  // Hash the password
+  $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // Move uploaded profile image to a directory (e.g., uploads/)
-        $target_dir = "image/";
-        $target_file = $target_dir . basename($profile_image);
-        move_uploaded_file($_FILES["profileImage"]["tmp_name"], $target_file);
+  // Move uploaded profile image to a directory (e.g., uploads/)
+  $target_dir = "image/";
+  $target_file = $target_dir . basename($profile_image);
+  move_uploaded_file($_FILES["profileImage"]["tmp_name"], $target_file);
 
-        // Insert user into the database
-        $stmt = $conn->prepare("INSERT INTO users (user_name, email, password, profile_image) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("ssss", $username, $email, $hashed_password, $profile_image);
+  // Insert user into the database
+  $stmt = $conn->prepare("INSERT INTO users (user_name, email, password, profile_image) VALUES (?, ?, ?, ?)");
+  $stmt->bind_param("ssss", $username, $email, $hashed_password, $profile_image);
 
-        if ($stmt->execute()) {
-            // Get the last inserted user ID
-            $user_id = $conn->insert_id;
+  if ($stmt->execute()) {
+      // Get the last inserted user ID
+      $user_id = $conn->insert_id;
 
-            // Set session variables
-            $_SESSION['user_id'] = $user_id;
-            $_SESSION['username'] = $username;
-            $_SESSION['email'] = $email;
+      // Set session variables
+      $_SESSION['user_id'] = $user_id;
+      $_SESSION['username'] = $username;
+      $_SESSION['email'] = $email;
 
+      // Generate a random 6-digit OTP
+      $otp = sprintf("%06d", mt_rand(1, 999999));
+      $_SESSION['otp'] = $otp;
 
-            echo "<script>
-                alert('Signup successful! Redirecting to your dashboard...');
-                window.location.href = 'user/problem.php';
-                </script>";
-            exit();
-        } else {
-            $errors[] = "Something went wrong during signup. Please try again.";
-        }
-    }
+      $mail = new PHPMailer(true);
+
+      try {
+          //Server settings
+          $mail->SMTPDebug = 0;
+          $mail->isSMTP();
+          $mail->Host       = 'smtp.gmail.com';
+          $mail->SMTPAuth   = true;
+          $mail->Username   = 'onlinetutoringmanagementsystem@gmail.com';
+          $mail->Password   = 'echq pdvq pszu dhyf';
+          $mail->SMTPSecure = 'tls';
+          $mail->Port       = 587;
+            
+          //Recipients
+          $mail->setFrom('onlinetutoringmanagementsystem@gmail.com', 'Online Tutoring Management System');
+          $mail->addAddress($email, $username);
+      
+          //Content
+          $mail->isHTML(true);
+          $mail->Subject = 'OTP Verification for Online Tutoring Management System';
+          $mail->Body    = "Your OTP for account verification is: <b>$otp</b>. Please enter this code to complete your registration.";
+          $mail->AltBody = "Your OTP for account verification is: $otp. Please enter this code to complete your registration.";
+      
+          $mail->send();
+          echo "<script>
+          alert('Signup successful! Please check your email for OTP verification.');
+          window.location.href = 'otp.php';
+          </script>";
+          exit();
+      } catch (Exception $e) {
+          echo "Email could not be sent. Mailer Error: {$mail->ErrorInfo}";
+      }
+  } else {
+      $errors[] = "Something went wrong during signup. Please try again.";
+  }
+}
+
 }
 ?>
 
