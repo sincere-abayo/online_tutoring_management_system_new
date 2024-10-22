@@ -169,7 +169,7 @@ if (empty($errors)) {
         </div>
       </form>
       <p class="text-gray-600 text-sm mt-4 text-center">Already have an account? <a href="login.php" class="text-blue-500 hover:underline">Login</a></p>
-      <p class="text-gray-600 text-sm mt-4 text-center"> <a href="login.php" class="text-blue-500 hover:underline">Back to Home</a></p>
+      <p class="text-gray-600 text-sm mt-4 text-center"> <a href="index.php" class="text-blue-500 hover:underline">Back to Home</a></p>
     </div>
   </div>
 

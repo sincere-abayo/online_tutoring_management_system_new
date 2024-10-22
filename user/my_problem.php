@@ -106,7 +106,7 @@ $problem_category_result = mysqli_query($conn, $problem_category_sql);
         <h2 class="text-2xl font-bold mb-6">My Problems</h2>
         <form action="" method="get" class="mb-6">
             <label for="sort" class="block font-bold mb-2">Sort By</label>
-            <select id="sort" name="sort" class="px-3 py-2 w-96 border bg-gray-900 focus:outline-none text-white rounded-md border-2 border-sky-400" onchange="this.form.submit()">
+            <select id="sort" name="sort" class="px-3 py-2 w-96 border focus:outline-none  rounded-md" onchange="this.form.submit()">
                 <option value="all" <?= $sort == 'all' ? 'selected' : '' ?>>All Problems</option>
                 <option value="pending" <?= $sort == 'pending' ? 'selected' : '' ?>>Pending</option>
                 <option value="solved" <?= $sort == 'solved' ? 'selected' : '' ?>>Solved</option>
@@ -366,7 +366,10 @@ $like_color = $user_liked ? 'text-blue-500' : 'text-gray-600';
           </div>
     <?php endwhile; ?>
     <?php else: ?>
-        <p class="text-red-600 text-center text-2xl">No problems found.</p>
+        <div class="bg-red-100 p-4 w-full border-l-2 border-red-500">
+             <p class="text-red-600 text-center text-2xl">No posted problems found.</p>
+        </div>
+        
     <?php endif; ?>
 
 

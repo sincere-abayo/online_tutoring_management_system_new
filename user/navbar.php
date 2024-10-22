@@ -10,9 +10,13 @@
     $profile_image = $row['profile_image'];
     
      ?>
-    <nav class="bg-gray-900 text-white border-b border-gray-500 py-4 sticky top-0 z-50">
+    <nav class="bg-blue-800 text-white border-b border-gray-500 py-4 sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center px-4">
-            <h1 class="text-2xl font-bold">Online Tutoring Management System (OTMS)</h1>
+            <div class="text-center">
+            <h1 class="text-2xl font-bold">OTMS</h1>
+            <p class="text-xs text-gray-200">Online Tutoring Management System</p>
+            </div>
+            
             <div class="flex items-center space-x-4">
                 <a href="dashboard.php" class="text-white">Home</a>
                 <a href="my_problem.php" class="text-white">My Problems</a>

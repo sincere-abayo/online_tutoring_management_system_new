@@ -97,7 +97,7 @@ include 'navbar.php';
 
     <div class="container mx-auto mt-8 px-4">
         <div class="bg-white shadow-lg rounded-lg p-8 max-w-2xl mx-auto">
-            <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Post a Problem</h2>
+            <h2 class="text-3xl text-center text-gray-800">Post a Problem</h2>
 
             <?php if (isset($error)): ?>
                 <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
@@ -106,13 +106,14 @@ include 'navbar.php';
                 </div>
             <?php endif; ?>
 
-            <form action="" method="POST" enctype="multipart/form-data" class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+            <form action="" method="POST" enctype="multipart/form-data" class="">
     <input type="hidden" id="user_id" name="user_id" value="<?= $user_id ?>">
 
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
     <!-- Category -->
     <div>
-        <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-        <select id="category" name="category" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" required>
+        <label for="category" class="block text-sm  text-gray-700 mb-1">Category <span class="text-red-500">*</span> </label>
+        <select id="category" name="category" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200" required>
             <option value="" disabled selected>Select a category</option>
             <?php while ($row = mysqli_fetch_assoc($problem_category_result)): ?>
                 <option value="<?= $row['category_id'] ?>"><?= $row['category_name'] ?></option>
@@ -123,20 +124,20 @@ include 'navbar.php';
 
     <!-- Description -->
     <div>
-        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-        <textarea id="description" name="description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 resize-none" maxlength="500" placeholder="Describe your problem (approx. 50 words)" required></textarea>
+        <label for="description" class="block text-sm  text-gray-700 mb-1">Description <span class="text-red-500">*</span> </label>
+        <textarea id="description" name="description" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 resize-none" maxlength="500" placeholder="Describe your problem (approx. 50 words)" required></textarea>
         <p class="text-gray-500 text-xs mt-1">Maximum 500 characters (approx. 50 words).</p>
     </div>
 
     <!-- Email -->
     <div>
-        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-        <input type="email" id="email" name="email" value="<?= $user_email ?>" readonly class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 bg-gray-100 cursor-not-allowed" required>
+        <label for="email" class="block text-sm  text-gray-700 mb-1">Email <span class="text-red-500">*</span> </label>
+        <input type="email" id="email" name="email" value="<?= $user_email ?>" readonly class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 bg-gray-100 cursor-not-allowed" required>
     </div>
 
     <!-- Phone Contact -->
     <div>
-        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Contact</label>
+        <label for="phone" class="block text-sm  text-gray-700 mb-1">Phone Contact <span class="text-red-500">*</span> </label>
         <div class="flex">
             <select id="country_code" name="country_code" class="w-1/3 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                 <option value="250">+250 Rwanda</option>
@@ -151,17 +152,20 @@ include 'navbar.php';
 
     <!-- Image Upload -->
     <div>
-        <label for="images" class="block text-sm font-medium text-gray-700 mb-1">Upload Images</label>
+        <label for="images" class="block text-sm  text-gray-700 mb-1">Upload Images <span class="text-red-500">*</span> </label>
         <input type="file" id="images" name="images[]" multiple accept="image/jpeg, image/png" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
         <p class="text-gray-500 text-xs mt-1">You can upload multiple images (JPEG, PNG).</p>
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" class="w-full bg-blue-500 text-white px-4 py-3 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">Post Problem</button>
+     <div class="md:col-span-2">
+         <button type="submit" class="w-full bg-blue-500 text-white px-4 py-1 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">Post</button>
+     </div>
+    </div>
 </form>
 
 
-            <p class="text-gray-600 text-sm mt-6 text-center">Return to <a href="dashboard.php" class="text-blue-500 hover:underline">Home</a></p>
+         
         </div>
     </div>
 
