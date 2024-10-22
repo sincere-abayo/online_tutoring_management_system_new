@@ -132,228 +132,146 @@ function countReplies($conn, $comment_id) {
     </section>
 
 
+    <!-- problems -->
 
+    <section class="py-12 mt-14 px-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <?php while ($row = $result->fetch_assoc()): ?>
+                <div class="bg-white shadow-md rounded-lg p-4">
+                    <h3 class="text-lg font-bold"><?= htmlspecialchars($row['category_name']) ?></h3>
+                    <p class="text-gray-700"><?= htmlspecialchars($row['description']) ?></p>
+                    <p class="text-gray-600">Email: <?= htmlspecialchars($row['email']) ?></p>
+                    <p class="text-gray-600">Contact: <?= htmlspecialchars($row['contact']) ?></p>
+                    <p class="text-gray-600">Status: <?= htmlspecialchars($row['status']) ?></p>
 
-
-
-    <div class=" md:mx-10 mx-5 my-8 px-4">
-        <h2 class="text-2xl font-bold mb-6">Posted Problems</h2>
-
-        <div class=" ">
-        <form action="" method="get" class="mb-6">
-            <label for="sort" class="block font-bold mb-2 ">Sort By</label>
-            <select id="sort" name="sort" class="px-3 py-2 w-96 border focus:outline-none  rounded-md border-2" onchange="this.form.submit()">
-                <option value="all" <?= $sort == 'all' ? 'selected' : '' ?>>All Problems</option>
-                <option value="pending" <?= $sort == 'pending' ? 'selected' : '' ?>>Pending</option>
-                <option value="solved" <?= $sort == 'solved' ? 'selected' : '' ?>>Solved</option>
-            </select>
-        </form>
-        </div>
-
-       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-    <?php while ($row = $result->fetch_assoc()): ?>
-        <div class="bg-white shadow-md rounded-lg p-4">
-            <h3 class="text-lg  text-blue-800 font-bold"><?= htmlspecialchars($row['category_name']) ?></h3>
-            <p class="text-black"><?= htmlspecialchars($row['description']) ?></p>
-            <p class="text-black"> <span class="font-medium" >  Email:  </span> <?= htmlspecialchars($row['email']) ?></p>
-            <p class="text-black"> <span class="font-medium" >  Contact: </span>  <?= htmlspecialchars($row['contact']) ?></p>
-            <p class="text-black"> <span class="font-medium" >  Status: </span>  <?= htmlspecialchars($row['status']) ?></p>
-
-            <div class="mt-4 flex flex-wrap items-center gap-4">
-                <?php
-                $poster_name = $row['user_name'];
-                $problem = $row['description'];
-                $contact_number = preg_replace('/[^0-9]/', '', $row['contact']);
-                $message = urlencode("Hi " . $poster_name . ", I saw your problem: '" . $problem . "', and I would like to help you with it.");
-                $whatsappLink = "https://wa.me/" . $contact_number . "?text=" . $message;
-
-                // Count the number of comments for this problem
-                $comments_count_sql = "SELECT COUNT(*) as count FROM comments WHERE problem_id = " . $row['problem_id'] . " AND parent_comment_id IS NULL";
-                $comments_count_result = $conn->query($comments_count_sql);
-                $comments_count = $comments_count_result->fetch_assoc()['count'];
-
-                // Count the number of images for this problem
-                $images_count_sql = "SELECT COUNT(*) as count FROM problem_images WHERE problem_id = " . $row['problem_id'];
-                $images_count_result = $conn->query($images_count_sql);
-                $images_count = $images_count_result->fetch_assoc()['count'];
-                ?>
-             
-
-             
-              <a href="login.php">  <button  class="px-4 py-2 bg-purple-100 text-purple-700 rounded-full hover:bg-purple-200 transition duration-300">
-                    <i class="fas fa-plus mr-2"></i>Add Comment
-                </button> </a>
-                <a href="<?= $whatsappLink ?>" target="_blank" class="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-300">
-                    <i class="fab fa-whatsapp mr-2"></i>WhatsApp Me
-                </a>
-            </div>
-            <!-- Add Comment Section (Initially hidden) -->
-            <div id="add-comment-<?= $row['problem_id'] ?>" class="hidden mt-4"> 
-    <form id="commentForm_<?= $row['problem_id']; ?>" onsubmit="submitComment(event, 'commentForm_<?= $row['problem_id']; ?>')" enctype="multipart/form-data">
-        <div class="flex items-center mb-2">
-            <label for="file-input-<?= $row['problem_id'] ?>" class="cursor-pointer">
-                <i class="fa-solid fa-image text-gray-500 hover:text-blue-500 text-xl"></i>
-                <input id="file-input-<?= $row['problem_id'] ?>" name="image" type="file" class="hidden" accept="image/*" />
-            </label>
-            <textarea name="comment" placeholder="Add your comment here..." class="w-full px-3 py-2 border rounded-md ml-2"></textarea>
-        </div>
-        <input type="hidden" name="problem_id" value="<?= $row['problem_id'] ?>">
-        <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded-md">Send</button>
-    </form>
-    <div id="commentMessage_<?= $row['problem_id'] ?>" class="mt-2 text-sm"></div> <!-- This div is for displaying messages -->
-</div>
-
-              <!-- Comments Section (Initially hidden) -->
-              <div id="comments-<?= $row['problem_id'] ?>" class="hidden mt-4">
-              <h4 class="font-semibold text-gray-700 mb-2">Comments</h4>
-              <div class="comments-section mt-4">
-                  <?php
-                  // Fetch top-level comments
-                  $comments_sql = "SELECT c.comment_id, c.comment, c.image_url, u.user_name, u.profile_image, c.created_at, u.user_id FROM comments c 
-                                 JOIN users u ON c.user_id = u.user_id 
-                                 WHERE c.problem_id = " . $row['problem_id'] . " AND c.parent_comment_id IS NULL";
-                  $comments_result = $conn->query($comments_sql);
-                
-                  
-                  ?>
-                  <?php while ($comment_row = $comments_result->fetch_assoc()): ?>
-    <div class="comment bg-gray-100 p-4 rounded-md mb-4 shadow-sm">
-        <div class="flex items-start">
-            <img src="../image/<?= htmlspecialchars($comment_row['profile_image']) ?>" alt="Avatar" class="w-10 h-10 rounded-full mr-4">
-            <div class="flex-grow">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="font-semibold text-gray-900"><?= htmlspecialchars($comment_row['user_name']) ?></span>
-                    <span class="text-gray-500 text-xs"><?= date('Y-m-d H:i:s', strtotime($comment_row['created_at'])) ?></span>
-                </div>
-                <p class="text-gray-700 mb-3"><?= htmlspecialchars($comment_row['comment']) ?></p>
-                
-                <div class="flex items-center space-x-4 flex-wrap">
-                    <?php if (!empty($comment_row['image_url'])): ?>
-                    <button onclick="openImageModal1('<?= $comment_row['image_url'] ?>')" class="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out flex items-center">
-                        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                        View Image
-                    </button>
-                    
-                    <?php endif; ?>
-                    
-                    <!-- <form method="post" class="inline"> -->
-                        <?php 
-                        $comments_count_sql = "SELECT * FROM likes WHERE comment_id = " . $comment_row['comment_id'];
-                        $comments_count_result = $conn->query($comments_count_sql);
-                        $likes = $comments_count_result->num_rows;
-                        $user_liked = $conn->query("SELECT * FROM likes WHERE comment_id = {$comment_row['comment_id']} AND user_id = {$_SESSION['user_id']}")->num_rows > 0;
-$like_color = $user_liked ? 'text-blue-500' : 'text-gray-600';
-                    
-                    ?>
-                        <button onclick="likeComment(<?= $comment_row['comment_id'] ?>)" class="like-button <?= $like_color ?> hover:text-blue-500 transition duration-300 ease-in-out flex items-center">
-    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
-    </svg>
-    <?php if ($likes > 0): ?><span class="font-semibold" id="comment<?php echo $comment_row['comment_id'] ?>"><?php echo $likes ?></span><?php endif; ?>
-    <span class="ml-1"><?php echo $likes === 1 ? 'Like' : 'Likes' ?></span>
-</button>
-                    <!-- </form> -->
-                    
-                    <button onclick="toggleReplyForm(<?= $comment_row['comment_id'] ?>)" class="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out text-sm">Reply</button>
-                    
-                    <span class="text-gray-500 text-xs">• <?= time_ago($comment_row['created_at']) ?> •</span>
-                </div>
-
-                <div class="mt-4">
-                    <div id="reply-form-<?= $comment_row['comment_id'] ?>" class="hidden mt-4 bg-gray-50 p-4 rounded-lg shadow-md">
-                    <form id="replyForm_<?= $comment_row['comment_id']; ?>" onsubmit="submitReply(event, 'replyForm_<?= $comment_row['comment_id']; ?>')" enctype="multipart/form-data" class="space-y-3">
-    <div class="flex items-start space-x-2">
-        <label for="file-input-reply-<?= $comment_row['comment_id'] ?>" class="cursor-pointer bg-white p-2 rounded-full hover:bg-gray-100 transition duration-300">
-            <i class="fa-solid fa-image text-gray-500 hover:text-blue-500 text-xl"></i>
-            <input id="file-input-reply-<?= $comment_row['comment_id'] ?>" name="image" type="file" class="hidden" accept="image/*" />
-        </label>
-        <textarea name="comment" placeholder="Write a reply..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"></textarea>
-    </div>
-    <input type="hidden" name="parent_comment_id" value="<?= $comment_row['comment_id'] ?>">
-    <input type="hidden" name="problem_id" value="<?= $row['problem_id'] ?>">
-    <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Send Reply</button>
-</form>
-<div id="replyMessage_<?= $comment_row['comment_id']; ?>" class="mt-2 text-sm"></div> <!-- Div for displaying success/error messages -->
-
-                    </div>
-                    
-                    <?php
-                    $reply_count = countReplies($conn, $comment_row['comment_id']);
-                    if ($reply_count > 0):
-                    ?>
-                    <button onclick="toggleReplies(<?= $comment_row['comment_id'] ?>)" class="mt-2 text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out">
-                        View Replies (<span id="replays_<?php echo $comment_row['comment_id']?>"><?= $reply_count ?></span>)
-                    </button>
-                    <?php endif; ?>
-                    
-                    <div id="replies-<?= $comment_row['comment_id'] ?>" class="replies ml-10 mt-3 hidden">
+                    <div class="mt-4 md:space-x-10">
                         <?php
-                        $replies_sql = "SELECT r.comment_id, r.comment, r.image_url, u.user_name, u.profile_image, r.created_at, u.user_id 
+                        $poster_name = $row['user_name'];
+                        $problem = $row['description'];
+                        $contact_number = preg_replace('/[^0-9]/', '', $row['contact']);
+                        $message = urlencode("Hi " . $poster_name . ", I saw your problem: '" . $problem . "', and I would like to help you with it.");
+                        $whatsappLink = "https://wa.me/" . $contact_number . "?text=" . $message;
+                        ?>
+                        
+                       <a href="login.php "> <button class="text-blue-800 font-medium cursor-pointer">Add Comment</button> </a> 
+                        <a href="<?= $whatsappLink ?>" target="_blank" class="text-green-600 font-medium hover:text-green-600">
+                            <i class="fab fa-whatsapp fa-2x"></i> WhatsApp Me
+                        </a>
+                    </div>
+
+                    <!-- Add Comment Section (Initially hidden) -->
+                    <div id="add-comment-<?= $row['problem_id'] ?>" class="hidden mt-4">
+                        <form action="add_comment.php" method="post" enctype="multipart/form-data">
+                            <div class="flex items-center mb-2">
+                                <label for="file-input-<?= $row['problem_id'] ?>" class="cursor-pointer">
+                                    <i class="fa-solid fa-image text-gray-500 hover:text-blue-500 text-xl"></i>
+                                    <input id="file-input-<?= $row['problem_id'] ?>" name="image" type="file" class="hidden"
+                                        accept="image/*" />
+                                </label>
+                                <textarea name="comment" placeholder="Add your comment here..."
+                                    class="w-full px-3 py-2 border rounded-md ml-2"></textarea>
+                            </div>
+                            <input type="hidden" name="problem_id" value="<?= $row['problem_id'] ?>">
+                            <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded-md">Send</button>
+                        </form>
+                    </div>
+
+                    <!-- Comments Section (Initially hidden) -->
+                    <div id="comments-<?= $row['problem_id'] ?>" class="hidden mt-4">
+                        <?php
+                        // Fetch top-level comments
+                        $comments_sql = "SELECT c.comment_id, c.comment, c.image_url, u.user_name, c.created_at FROM comments c 
+                                         JOIN users u ON c.user_id = u.user_id 
+                                         WHERE c.problem_id = " . $row['problem_id'] . " AND c.parent_comment_id IS NULL";
+                        $comments_result = $conn->query($comments_sql);
+                        ?>
+                        <h4 class="font-semibold text-gray-700 mb-2">Comments</h4>
+                        <?php while ($comment_row = $comments_result->fetch_assoc()): ?>
+                            <div class="bg-gray-100 p-4 rounded-md mb-2">
+                                <div class="flex justify-between">
+                                    <div>
+                                        <span
+                                            class="font-bold text-gray-800"><?= htmlspecialchars($comment_row['user_name']) ?>:</span>
+                                        <p class="text-gray-700"><?= htmlspecialchars($comment_row['comment']) ?></p>
+                                        <?php if ($comment_row['image_url']): ?>
+                                            <button onclick="toggleReply(<?= $comment_row['comment_id'] ?>)"
+                                                class="text-blue-500 hover:underline text-sm mt-2">View Reply</button>
+                                        <?php endif; ?>
+                                        <!-- Reply Button -->
+                                        <button onclick="toggleReplyForm(<?= $comment_row['comment_id'] ?>)"
+                                            class="text-blue-500 hover:underline text-sm mt-2">Reply</button>
+                                            <button onclick="toggleReply(<?= $comment_row['comment_id'] ?>)"
+                                            class="text-blue-500 hover:underline text-sm mt-2">View Reply</button>
+
+                                        <!-- Reply Form (Initially hidden) -->
+                                        <div id="reply-form-<?= $comment_row['comment_id'] ?>" class="hidden mt-2">
+                                            <form action="add_comment.php" method="post" enctype="multipart/form-data">
+                                                <div class="flex items-center mb-2">
+                                                    <label for="file-input-reply-<?= $comment_row['comment_id'] ?>"
+                                                        class="cursor-pointer">
+                                                        <i
+                                                            class="fa-solid fa-image text-gray-500 hover:text-blue-500 text-xl"></i>
+                                                        <input id="file-input-reply-<?= $comment_row['comment_id'] ?>"
+                                                            name="image" type="file" class="hidden" accept="image/*" />
+                                                    </label>
+                                                    <textarea name="comment" placeholder="Write a reply..."
+                                                        class="w-full px-3 py-2 border rounded-md ml-2"></textarea>
+                                                </div>
+                                                <input type="hidden" name="parent_comment_id"
+                                                    value="<?= $comment_row['comment_id'] ?>">
+                                                <input type="hidden" name="problem_id" value="<?= $row['problem_id'] ?>">
+                                                <button type="submit"
+                                                    class="px-4 py-2 text-white bg-blue-500 rounded-md">Send</button>
+                                            </form>
+                                        </div>
+
+                                        <!-- Display Replies Hierarchically -->
+                                        <?php
+                                        // Fetch replies for the specific comment
+                                        $replies_sql = "SELECT r.comment_id, r.comment, r.image_url, u.user_name, r.created_at 
                                         FROM comments r 
                                         JOIN users u ON r.user_id = u.user_id 
                                         WHERE r.parent_comment_id = " . $comment_row['comment_id'];
-                        $replies_result = $conn->query($replies_sql);
-                        while ($reply_row = $replies_result->fetch_assoc()):
-                        ?>
-                        <div class="reply bg-gray-50 p-3 rounded-md mb-2">
-                            <div class="flex items-start">
-                                <img src="../image/<?= htmlspecialchars($reply_row['profile_image']) ?>" alt="Avatar" class="w-8 h-8 rounded-full mr-3">
-                                <div class="flex-grow">
-                                    <div class="flex justify-between items-center mb-1">
-                                        <span class="font-semibold text-gray-800"><?= htmlspecialchars($reply_row['user_name']) ?></span>
-                                        <span class="text-gray-500 text-xs"><?= date('Y-m-d H:i:s', strtotime($reply_row['created_at'])) ?></span>
+
+                                        $replies_result = $conn->query($replies_sql);
+                                        ?>
+                                        <?php while ($reply_row = $replies_result->fetch_assoc()): ?>
+                                                <div id="replies-<?= $comment_row['comment_id'] ?>" class="hidden mt-2">
+                                                <div class="flex justify-between">
+                                                    <div>
+                                                        <span
+                                                            class="font-bold text-gray-800"><?= htmlspecialchars($reply_row['user_name']) ?>:</span>
+                                                        <p class="text-gray-700"><?= htmlspecialchars($reply_row['comment']) ?></p>
+                                                        <?php if ($reply_row['image_url']): ?>
+                                                            <button onclick="openImageModal(<?= $reply_row['comment_id'] ?>, 'reply')"
+                                                                class="text-blue-500 hover:underline text-sm mt-2">View Image</button>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                    <div class="text-gray-500 text-sm">
+                                                        <?= date('F j, Y, g:i a', strtotime($reply_row['created_at'])) ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php endwhile; ?>
                                     </div>
-                                    <p class="text-gray-700 text-sm"><?= htmlspecialchars($reply_row['comment']) ?></p>
-                                    <div class="mt-3 flex items-center space-x-4">
-                                    <?php 
-                        $comments_count_sql = "SELECT * FROM likes WHERE comment_id = " . $reply_row['comment_id'];
-                        $comments_count_result = $conn->query($comments_count_sql);
-                        $likes = $comments_count_result->num_rows;
-                        $user_liked = $conn->query("SELECT * FROM likes WHERE comment_id = {$reply_row['comment_id']} AND user_id = {$_SESSION['user_id']}")->num_rows > 0;
-$like_color = $user_liked ? 'text-blue-500' : 'text-gray-600';
-                    
-                    ?>  
-                                    <button onclick="likeComment(<?= $reply_row['comment_id'] ?>)" class="like-button <?= $like_color ?> hover:text-blue-500 transition duration-300 ease-in-out flex items-center">
-             <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
-    </svg>
-    <?php if ($likes > 0): ?><span class="font-semibold" id="comment<?php echo $reply_row['comment_id'] ?>"><?php echo $likes ?></span><?php endif; ?>
-    <span class="ml-1"><?php echo $likes === 1 ? 'Like' : 'Likes' ?></span>
-</button>
-                                        <?php if (!empty($reply_row['image_url'])): ?>
-                                            <button onclick="openImageModal1('<?= $reply_row['image_url'] ?>')" class="text-blue-500 hover:text-blue-600 transition duration-300 ease-in-out flex items-center">
-                                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                                </svg>
-                                                View Image
-                                            </button>
-                                        <?php endif; ?>
+                                    <div class="text-gray-500 text-sm">
+                                        <?= date('F j, Y, g:i a', strtotime($comment_row['created_at'])) ?>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         <?php endwhile; ?>
                     </div>
                 </div>
-            </div>
+            <?php endwhile; ?>
         </div>
-    </div>
-<?php endwhile; ?>
 
-                      
-                  </div>
-              </div>
-          </div>
-    <?php endwhile; ?>
-</div>
+        <div class="text-center mt-10">
+            <a href="login.php" class="text-white bg-blue-800 px-10 py-1 rounded-lg hover:bg-white hover:border-2 hover:border-blue-800 hover:text-blue-800" >View more...</a>
+        </div>
+
+        </section>
 
 
-    </div>
-                                        </div>
-                                        </div>
-                              </div>
     <!-- Modal Structure -->
 
     <!-- How It Works Section -->
