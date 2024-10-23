@@ -103,7 +103,12 @@ $problem_category_result = mysqli_query($conn, $problem_category_sql);
 
 <body>
     <div class=" md:mx-10 mx-5 my-8 px-4">
-        <h2 class="text-2xl font-bold mb-6">My Problems</h2>
+
+    <div class=" py-1">
+        <h2 class="text-2xl font-bold mb-6 text-center bg-white p-3">Problems You Post</h2>
+
+
+    <div class="flex justify-between items-center ">
         <form action="" method="get" class="mb-6">
             <label for="sort" class="block font-bold mb-2">Sort By</label>
             <select id="sort" name="sort" class="px-3 py-2 w-96 border focus:outline-none  rounded-md" onchange="this.form.submit()">
@@ -111,22 +116,32 @@ $problem_category_result = mysqli_query($conn, $problem_category_sql);
                 <option value="pending" <?= $sort == 'pending' ? 'selected' : '' ?>>Pending</option>
                 <option value="solved" <?= $sort == 'solved' ? 'selected' : '' ?>>Solved</option>
             </select>
+            
         </form>
 
-       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="">
+
+        <a href="problem.php" class="text-white bg-blue-800 px-5 py-1.5 rounded-md">Post Problem</a>
+     </div>
+    </div>
+
+        </div>
+    
+
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-5">
         <?php if (mysqli_num_rows($result) > 0): ?>
     <?php while ($row = $result->fetch_assoc()): ?>
-        <div class="bg-gray-950 shadow-md rounded-lg p-4">
+        <div class="bg-white shadow-md rounded-lg p-4">
 
             <p class="text-green-500 font-semibold mb-4 success_<?php echo $row['problem_id'] ?>">
                
             </p>
 
-            <h3 class="text-lg  text-sky-300 font-bold"><?= htmlspecialchars($row['category_name']) ?></h3>
-            <p class="text-gray-300"><?= htmlspecialchars($row['description']) ?></p>
-            <p class="text-gray-400">Email: <?= htmlspecialchars($row['email']) ?></p>
-            <p class="text-gray-400">Contact: <?= htmlspecialchars($row['contact']) ?></p>
-                    <p class="text-gray-400">Status: <?= htmlspecialchars($row['status']) ?></p>
+            <h3 class="text-lg  text-blue-800 font-bold"><?= htmlspecialchars($row['category_name']) ?></h3>
+            <p class="text-black"><?= htmlspecialchars($row['description']) ?></p>
+            <p class="text-black"> <span class="font-bold" >   Email: </span> <?= htmlspecialchars($row['email']) ?></p>
+            <p class="text-black"> <span class="font-bold" >   Contact: </span> <?= htmlspecialchars($row['contact']) ?></p>
+                    <p class="text-black"> <span class="font-bold" >   Status: </span> <?= htmlspecialchars($row['status']) ?></p>
                     <?php if ($row['status'] !== 'solved'): ?>
                         <button onclick="confirmSolvedProblem(<?= $row['problem_id'] ?>)" class="mt-2 px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-300">
                             <i class="fas fa-check mr-2"></i>Confirm Solved

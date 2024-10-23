@@ -20,7 +20,6 @@
             <div class="flex items-center space-x-4">
                 <a href="dashboard.php" class="text-white">Home</a>
                 <a href="my_problem.php" class="text-white">My Problems</a>
-                <a href="problem.php" class="text-white">Post Problem</a>
                 <a href="../logout.php" class="text-white">Logout</a>
                 <!-- Profile Image -->
                 <img
