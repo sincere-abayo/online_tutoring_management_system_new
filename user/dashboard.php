@@ -4,7 +4,9 @@ include 'session.php'; // Include the session
 include 'navbar.php'; // Include the navigation bar
 // Fetch problems 
 $sort = $_GET['sort'] ?? 'all';
-$sql = "SELECT p.problem_id, p.description, p.email, p.contact, p.status, u.user_name, pc.category_name 
+$category = $_GET['category'] ?? 'all';
+
+$sql = "SELECT p.problem_id, p.description, p.email, p.contact, p.status, u.user_name, pc.category_name
         FROM problems p
         JOIN users u ON p.user_id = u.user_id
         JOIN problem_categories pc ON p.category_id = pc.category_id";
@@ -14,6 +16,20 @@ if ($sort == 'pending') {
 } elseif ($sort == 'solved') {
     $sql .= " WHERE p.status = 'solved'";
 }
+
+if ($category != 'all') {
+    $sql .= ($sort == 'all' ? " WHERE" : " AND") . " pc.category_id = " . intval($category);
+}
+
+
+$result = $conn->query($sql);
+
+// Fetch categories for the dropdown
+$categories_sql = "SELECT * FROM problem_categories";
+$categories_result = $conn->query($categories_sql);
+
+
+
 
 $result = $conn->query($sql);
 
@@ -98,16 +114,30 @@ function countReplies($conn, $comment_id) {
     <div class=" md:mx-10 mx-5 my-8 px-4">
         <h2 class="text-2xl font-bold mb-6">Posted Problems</h2>
 
-        <div class=" ">
-        <form action="" method="get" class="mb-6">
-            <label for="sort" class="block font-bold mb-2 ">Sort By</label>
-            <select id="sort" name="sort" class="px-3 py-2 w-96 border focus:outline-none  rounded-md border-2" onchange="this.form.submit()">
+        <div class="mb-6">
+    <form action="" method="get" class="flex flex-wrap gap-4">
+        <div>
+            <label for="sort" class="block font-bold mb-2">Sort By Status</label>
+            <select id="sort" name="sort" class="px-3 py-2 w-48 border focus:outline-none rounded-md border-2" onchange="this.form.submit()">
                 <option value="all" <?= $sort == 'all' ? 'selected' : '' ?>>All Problems</option>
                 <option value="pending" <?= $sort == 'pending' ? 'selected' : '' ?>>Pending</option>
                 <option value="solved" <?= $sort == 'solved' ? 'selected' : '' ?>>Solved</option>
             </select>
-        </form>
         </div>
+        <div>
+            <label for="category" class="block font-bold mb-2">Sort By Category</label>
+            <select id="category" name="category" class="px-3 py-2 w-48 border focus:outline-none rounded-md border-2" onchange="this.form.submit()">
+                <option value="all" <?= $category == 'all' ? 'selected' : '' ?>>All Categories</option>
+                <?php while ($cat = $categories_result->fetch_assoc()): ?>
+                    <option value="<?= $cat['category_id'] ?>" <?= $category == $cat['category_id'] ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($cat['category_name']) ?>
+                    </option>
+                <?php endwhile; ?>
+            </select>
+        </div>
+    </form>
+</div>
+
 
        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     <?php while ($row = $result->fetch_assoc()): ?>

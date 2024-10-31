@@ -119,7 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_password'])) {
         <?php endif; ?>
         
         <!-- Display current details -->
-        <div class="bg-white shadow-md rounded p-6 mb-6">
+         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="bg-white shadow-md rounded p-6 mb-6 h-full">
             <h2 class="text-xl font-semibold mb-4">Current Details</h2>
             <div class="flex items-center mb-4">
                 <img src="../image/<?php echo htmlspecialchars($user['profile_image']); ?>" alt="Profile Picture" class="w-24 h-24 rounded-full object-cover mr-4">
@@ -138,9 +139,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_password'])) {
         </div>
 
         <!-- Edit Profile Form -->
-        <div class="bg-white shadow-md rounded p-6">
+        <div class="bg-white shadow-md rounded p-6 h-full flex flex-col">
             <h2 class="text-xl font-semibold mb-4">Edit Profile</h2>
-            <form action="#" method="POST">
+            <form action="#" method="POST" class="flex-grow">
                 <div class="mb-4">
                     <label for="user_name" class="block text-gray-700 text-sm font-bold mb-2">Name</label>
                     <input type="text" id="user_name" name="user_name" value="<?php echo htmlspecialchars($user['user_name']); ?>" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -153,39 +154,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_password'])) {
                     <button type="submit" name="update_profile" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Update Profile
                     </button>
-                    
                 </div>
             </form>
+
             <!-- Password Update Form (Initially Hidden) -->
-<div id="passwordUpdateForm" class="hidden bg-white shadow-md rounded p-6 mt-6">
-    <h2 class="text-xl font-semibold mb-4">Update Password</h2>
-    <form action="" method="POST">
-        <div class="mb-4">
-            <label for="current_password" class="block text-gray-700 text-sm font-bold mb-2">Current Password</label>
-            <input type="password" id="current_password" name="current_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-        </div>
-        <div class="mb-4">
-            <label for="new_password" class="block text-gray-700 text-sm font-bold mb-2">New Password</label>
-            <input type="password" id="new_password" name="new_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-        </div>
-        <div class="mb-4">
-            <label for="confirm_password" class="block text-gray-700 text-sm font-bold mb-2">Confirm New Password</label>
-            <input type="password" id="confirm_password" name="confirm_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-        </div>
-        <div class="flex items-center justify-between">
-            <button type="submit" name="update_password" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Update Password
+            <div id="passwordUpdateForm" class="hidden bg-white rounded mt-6">
+                <h2 class="text-xl font-semibold mb-4">Update Password</h2>
+                <form action="" method="POST">
+                    <div class="mb-4">
+                        <label for="current_password" class="block text-gray-700 text-sm font-bold mb-2">Current Password</label>
+                        <input type="password" id="current_password" name="current_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="new_password" class="block text-gray-700 text-sm font-bold mb-2">New Password</label>
+                        <input type="password" id="new_password" name="new_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="confirm_password" class="block text-gray-700 text-sm font-bold mb-2">Confirm New Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button type="submit" name="update_password" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Update Password
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Button to toggle password update form -->
+            <button onclick="togglePasswordForm()" class="mt-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Change Password
             </button>
         </div>
-    </form>
-</div>
-
-<!-- Button to toggle password update form -->
-<button onclick="togglePasswordForm()" class="mt-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-    Change Password
-</button>
-
         </div>
+
+
         <script>
 function togglePasswordForm() {
     const form = document.getElementById('passwordUpdateForm');
