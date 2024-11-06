@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 08, 2024 at 08:12 PM
+-- Generation Time: Nov 02, 2024 at 11:54 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `online_tutoring`
+-- Database: `online_tutoring1`
 --
 
 -- --------------------------------------------------------
@@ -42,21 +42,22 @@ CREATE TABLE `comments` (
 --
 
 INSERT INTO `comments` (`comment_id`, `problem_id`, `user_id`, `comment`, `created_at`, `parent_comment_id`, `image_url`) VALUES
-(2, 2, 4, 'I have experience in machine learning. We can collaborate.', '2024-10-02 13:21:43', NULL, NULL),
-(3, 3, 2, 'You should consider using encryption and secure authentication.', '2024-10-02 13:21:43', NULL, NULL),
-(23, 3, 1, 'ok thanks', '2024-10-04 12:28:09', 3, NULL),
-(24, 1, 1, 'i am expert with four years of experience I can help you', '2024-10-04 12:29:02', NULL, NULL),
-(25, 1, 1, 'i like it, how could we meet?', '2024-10-04 12:29:23', 24, NULL),
-(26, 1, 1, 'sincere ararwaye', '2024-10-04 12:30:36', NULL, NULL),
-(27, 1, 1, 'ntago ari kurya', '2024-10-04 12:30:57', 26, NULL),
-(38, 1, 1, 'hello\r\n', '2024-10-04 13:29:47', 24, NULL),
-(39, 1, 1, 'jlafn,', '2024-10-04 13:33:09', 24, NULL),
-(40, 1, 1, 'jfgvyujg', '2024-10-04 13:33:26', 24, NULL),
-(41, 1, 1, 'hello\r\n', '2024-10-08 16:14:50', NULL, NULL),
-(42, 1, 1, 'allow from any where', '2024-10-08 16:29:04', NULL, NULL),
-(43, 1, 1, 'allow from any where', '2024-10-08 16:29:57', NULL, NULL),
-(44, 1, 1, '', '2024-10-08 17:48:13', 24, NULL),
-(45, 1, 1, 'amani', '2024-10-08 18:01:41', NULL, NULL);
+(105, 13, 11, 'hello', '2024-11-02 20:07:50', NULL, NULL),
+(106, 13, 11, 'is it easy?', '2024-11-02 20:13:50', 105, NULL),
+(107, 13, 11, 'go this way', '2024-11-02 20:14:08', 105, '../image/67268810375a1_Screenshot 2024-10-27 114740.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `likes`
+--
+
+CREATE TABLE `likes` (
+  `l_id` int(11) NOT NULL,
+  `comment_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `liked_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -80,9 +81,8 @@ CREATE TABLE `problems` (
 --
 
 INSERT INTO `problems` (`problem_id`, `user_id`, `category_id`, `description`, `email`, `contact`, `status`, `created_at`) VALUES
-(1, 1, 1, 'Need help with building a login form in HTML and PHP.', 'john@example.com', '250 784 424 423', 'pending', '2024-10-02 13:21:43'),
-(2, 3, 4, 'Looking for help with a machine learning project.', 'alice@example.com', '250 784 424 423', 'solved', '2024-10-02 13:21:43'),
-(3, 1, 3, 'How can I improve the security of my web application?', 'john@example.com', '250 784 424 423', 'pending', '2024-10-02 13:21:43');
+(13, 1, 2, '3434fdfdfdfdfdfdftrt trhtrrrtrt', 'adminjj@gmail.com', '250 343 422 34355', 'solved', '2024-10-20 18:52:14'),
+(14, 11, 3, 'hello my name is amani fazo', 'a.fadhiliprojects@gmail.com', '250 784 424 423', 'pending', '2024-11-02 20:12:15');
 
 -- --------------------------------------------------------
 
@@ -124,10 +124,15 @@ CREATE TABLE `problem_images` (
 --
 
 INSERT INTO `problem_images` (`image_id`, `problem_id`, `image_url`, `uploaded_at`) VALUES
-(1, 1, 'img1.png', '2024-10-02 13:21:43'),
-(2, 3, 'img2.png', '2024-10-02 13:21:43'),
-(3, 2, 'img2.png', '2024-10-02 13:21:43'),
-(4, 3, 'img2.png', '2024-10-02 13:21:43');
+(18, 13, '../image/Screenshot 2024-02-23 152202.png', '2024-10-20 18:52:14'),
+(19, 14, '../image/Screenshot 2024-10-27 034509.png', '2024-11-02 20:12:15'),
+(20, 14, '../image/Screenshot 2024-10-27 114300.png', '2024-11-02 20:12:15'),
+(21, 14, '../image/Screenshot 2024-10-27 114651.png', '2024-11-02 20:12:15'),
+(22, 14, '../image/Screenshot 2024-10-27 114740.png', '2024-11-02 20:12:15'),
+(23, 14, '../image/Screenshot 2024-10-27 190430.png', '2024-11-02 20:12:15'),
+(24, 14, '../image/Screenshot 2024-10-27 191903.png', '2024-11-02 20:12:15'),
+(25, 14, '../image/Screenshot 2024-10-27 194033.png', '2024-11-02 20:12:15'),
+(26, 14, '../image/Screenshot 2024-10-27 205703.png', '2024-11-02 20:12:15');
 
 -- --------------------------------------------------------
 
@@ -140,18 +145,22 @@ CREATE TABLE `users` (
   `user_name` varchar(50) NOT NULL,
   `email` varchar(110) NOT NULL,
   `password` varchar(110) NOT NULL,
-  `profile_image` text DEFAULT NULL
+  `profile_image` text DEFAULT NULL,
+  `role` enum('user','admin') NOT NULL DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `user_name`, `email`, `password`, `profile_image`) VALUES
-(1, 'John Doe', 'john@example.com', 'password123', 'profile1.jpg'),
-(2, 'Jane Smith', 'jane@example.com', 'password123', 'profile2.jpg'),
-(3, 'Alice Johnson', 'alice@example.com', 'password123', 'profile3.jpg'),
-(4, 'Bob Williams', 'bob@example.com', 'password123', 'profile4.jpg');
+INSERT INTO `users` (`user_id`, `user_name`, `email`, `password`, `profile_image`, `role`) VALUES
+(1, 'amani fadhili b', 'adminjj@gmail.com', '$2y$10$Wbl9EfRuAPbbZDsWsplNS.RNBfOVE0OF7aJvhxhYSesH4t39VPFNW', 'p2.jpg', 'user'),
+(2, 'Jane Smith', 'jane@example.com', 'password123', 'IMG-20230727-WA00121.jpg', 'user'),
+(4, 'Bob Williams', 'bob@example.com', 'password123', '670702c242e18_IMG-20230727-WA0012.jpg', 'admin'),
+(8, 'amanifadhili', 'admin@gmail.com', '$2y$10$9W6/T60pEg.PZWWRpykWwODOJUSgSpLjqPGIaMnmXoSqM2fTVN6DC\n\n', 'IMG-20230727-WA00121.jpg', 'user'),
+(9, 'jules', 'jules@gmail.com', '$2y$10$6VT.XTP.OiNTiAiU28whI.nB1cDgMJEec7.WrK2YXQist.fJtD./O', 'WIN_20241010_11_10_42_Pro.jpg', 'user'),
+(10, 'admin', 'fadhiliamani200@gmail.com', '$2y$10$6VT.XTP.OiNTiAiU28whI.nB1cDgMJEec7.WrK2YXQist.fJtD./O', 'images.png', 'admin'),
+(11, 'fadhili amani', 'a.fadhiliprojects@gmail.com', '$2y$10$p.5EPsFmvE3GPlQ8rwJhp.Hr.lBafbuhTm1XC/aZTyftgyWCGqeQ.', 'Screenshot 2024-10-27 194033.png', 'user');
 
 --
 -- Indexes for dumped tables
@@ -165,6 +174,14 @@ ALTER TABLE `comments`
   ADD KEY `problem_id` (`problem_id`),
   ADD KEY `user_id` (`user_id`),
   ADD KEY `parent_comment_id` (`parent_comment_id`);
+
+--
+-- Indexes for table `likes`
+--
+ALTER TABLE `likes`
+  ADD PRIMARY KEY (`l_id`),
+  ADD KEY `userWhoLikes` (`user_id`),
+  ADD KEY `commentReplyLiked` (`comment_id`);
 
 --
 -- Indexes for table `problems`
@@ -203,31 +220,37 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+
+--
+-- AUTO_INCREMENT for table `likes`
+--
+ALTER TABLE `likes`
+  MODIFY `l_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `problems`
 --
 ALTER TABLE `problems`
-  MODIFY `problem_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `problem_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `problem_categories`
 --
 ALTER TABLE `problem_categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `problem_images`
 --
 ALTER TABLE `problem_images`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
@@ -240,6 +263,13 @@ ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`problem_id`) REFERENCES `problems` (`problem_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `comments_ibfk_3` FOREIGN KEY (`parent_comment_id`) REFERENCES `comments` (`comment_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `likes`
+--
+ALTER TABLE `likes`
+  ADD CONSTRAINT `commentReplyLiked` FOREIGN KEY (`comment_id`) REFERENCES `comments` (`comment_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `userWhoLikes` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `problems`

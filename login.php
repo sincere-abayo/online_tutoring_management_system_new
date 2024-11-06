@@ -14,12 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email) || empty($password)) {
         $error = 'Please fill in all fields.';
     } else {
-        // Check if the email exists in the database
-        $stmt = $conn->prepare("SELECT user_id, user_name, password FROM users WHERE email = ?");
+        // Modify the SQL query to include the role
+        $stmt = $conn->prepare("SELECT user_id, user_name, password, role FROM users WHERE email = ?");
         $stmt->bind_param('s', $email);
         $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result($user_id, $username, $hashed_password);
+        $stmt->bind_result($user_id, $username, $hashed_password, $role);
         $stmt->fetch();
 
         if ($stmt->num_rows > 0) {
@@ -29,12 +29,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_id'] = $user_id;
                 $_SESSION['username'] = $username;
                 $_SESSION['email'] = $email;
+                $_SESSION['role'] = $role;
 
-                // Redirect to the dashboard with success message
-                echo "<script>
-                   
-                    window.location.href = 'user/dashboard.php';
-                </script>";
+                // Redirect based on role
+                if ($role === 'admin') {
+                    echo "<script>window.location.href = 'admin/dashboard.php';</script>";
+                } else {
+                    echo "<script>window.location.href = 'user/dashboard.php';</script>";
+                }
                 exit();
             } else {
                 // Incorrect password

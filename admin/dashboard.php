@@ -1,6 +1,10 @@
 <?php
 // connection of the database
 include('../user/db.php');
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header("Location: ../login.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +34,7 @@ include('../user/db.php');
                 </button>
                 <h1 class="text-xl font-bold text-gray-800">Dashboard</h1>
                 <div class="flex items-center space-x-4">
-                    <button class="text-white bg-blue-600 px-4 py-2 rounded" onclick="window.location.href='../index.php'">Logout</button>
+                    <button class="text-white bg-blue-600 px-4 py-2 rounded" onclick="window.location.href='../logout.php'">Logout</button>
                 </div>
             </header>
 

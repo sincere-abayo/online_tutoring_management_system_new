@@ -1,6 +1,11 @@
 <?php
 include 'db.php'; // Include the database connection
 include 'session.php'; // Include the session
+// Check if user is logged in and has admin role
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
+    header("Location: ../login.php");
+    exit();
+}
 include 'navbar.php'; // Include the navigation bar
 // Fetch problems 
 $sort = $_GET['sort'] ?? 'all';

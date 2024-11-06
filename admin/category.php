@@ -1,3 +1,5 @@
+<?php include('../user/db.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +47,6 @@
                             </thead>
                             <tbody>
                                 <?php
-                                include('../user/db.php');
                                 $query = "SELECT * FROM problem_categories";
                                 $result = mysqli_query($conn, $query);
 

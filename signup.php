@@ -46,8 +46,9 @@ if (empty($errors)) {
   move_uploaded_file($_FILES["profileImage"]["tmp_name"], $target_file);
 
   // Insert user into the database
-  $stmt = $conn->prepare("INSERT INTO users (user_name, email, password, profile_image) VALUES (?, ?, ?, ?)");
-  $stmt->bind_param("ssss", $username, $email, $hashed_password, $profile_image);
+  $role = "user"; // Default role for new signups
+  $stmt = $conn->prepare("INSERT INTO users (user_name, email, password, profile_image, role) VALUES (?, ?, ?, ?, ?)");
+  $stmt->bind_param("sssss", $username, $email, $hashed_password, $profile_image, $role);
 
   if ($stmt->execute()) {
       // Get the last inserted user ID
@@ -57,6 +58,8 @@ if (empty($errors)) {
       $_SESSION['user_id'] = $user_id;
       $_SESSION['username'] = $username;
       $_SESSION['email'] = $email;
+      $_SESSION['role'] = $role;
+      
 
       // Generate a random 6-digit OTP
       $otp = sprintf("%06d", mt_rand(1, 999999));
