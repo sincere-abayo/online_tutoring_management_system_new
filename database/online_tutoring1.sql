@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 02, 2024 at 11:54 PM
+-- Generation Time: Nov 11, 2024 at 01:56 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,9 +42,9 @@ CREATE TABLE `comments` (
 --
 
 INSERT INTO `comments` (`comment_id`, `problem_id`, `user_id`, `comment`, `created_at`, `parent_comment_id`, `image_url`) VALUES
-(105, 13, 11, 'hello', '2024-11-02 20:07:50', NULL, NULL),
-(106, 13, 11, 'is it easy?', '2024-11-02 20:13:50', 105, NULL),
-(107, 13, 11, 'go this way', '2024-11-02 20:14:08', 105, '../image/67268810375a1_Screenshot 2024-10-27 114740.png');
+(108, 16, 12, 'try to check your internet connection', '2024-11-11 09:18:50', NULL, '../image/6731cbfa15c99_Screenshot 2024-10-27 034509.png'),
+(109, 16, 12, 'thats good point', '2024-11-11 09:19:32', 108, NULL),
+(110, 17, 12, 'show error screenshot', '2024-11-11 09:24:50', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -58,6 +58,13 @@ CREATE TABLE `likes` (
   `user_id` int(11) NOT NULL,
   `liked_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `likes`
+--
+
+INSERT INTO `likes` (`l_id`, `comment_id`, `user_id`, `liked_at`) VALUES
+(30, 108, 12, '2024-11-11 09:19:13');
 
 -- --------------------------------------------------------
 
@@ -82,7 +89,9 @@ CREATE TABLE `problems` (
 
 INSERT INTO `problems` (`problem_id`, `user_id`, `category_id`, `description`, `email`, `contact`, `status`, `created_at`) VALUES
 (13, 1, 2, '3434fdfdfdfdfdfdftrt trhtrrrtrt', 'adminjj@gmail.com', '250 343 422 34355', 'solved', '2024-10-20 18:52:14'),
-(14, 11, 3, 'hello my name is amani fazo', 'a.fadhiliprojects@gmail.com', '250 784 424 423', 'pending', '2024-11-02 20:12:15');
+(15, 9, 3, 'I need help understanding how to secure a basic web application for a class project. Specifically, I\'m struggling with protecting against SQL injection and cross-site scripting (XSS). Guidance on implementing secure coding practices would be valuable.', 'jules@gmail.com', '250 732 286 284', 'pending', '2024-11-11 09:09:17'),
+(16, 9, 4, 'I’m working on a machine learning project to classify images, but my model’s accuracy is low. I’m using convolutional neural networks in TensorFlow. Could someone help me with techniques to improve accuracy?', 'jules@gmail.com', '250 784 424 423', 'pending', '2024-11-11 09:10:32'),
+(17, 12, 4, 'my computer is not getting connected to the network ', 'a.fadhiliprojects@gmail.com', '250 788 581 860', 'solved', '2024-11-11 09:23:25');
 
 -- --------------------------------------------------------
 
@@ -125,14 +134,12 @@ CREATE TABLE `problem_images` (
 
 INSERT INTO `problem_images` (`image_id`, `problem_id`, `image_url`, `uploaded_at`) VALUES
 (18, 13, '../image/Screenshot 2024-02-23 152202.png', '2024-10-20 18:52:14'),
-(19, 14, '../image/Screenshot 2024-10-27 034509.png', '2024-11-02 20:12:15'),
-(20, 14, '../image/Screenshot 2024-10-27 114300.png', '2024-11-02 20:12:15'),
-(21, 14, '../image/Screenshot 2024-10-27 114651.png', '2024-11-02 20:12:15'),
-(22, 14, '../image/Screenshot 2024-10-27 114740.png', '2024-11-02 20:12:15'),
-(23, 14, '../image/Screenshot 2024-10-27 190430.png', '2024-11-02 20:12:15'),
-(24, 14, '../image/Screenshot 2024-10-27 191903.png', '2024-11-02 20:12:15'),
-(25, 14, '../image/Screenshot 2024-10-27 194033.png', '2024-11-02 20:12:15'),
-(26, 14, '../image/Screenshot 2024-10-27 205703.png', '2024-11-02 20:12:15');
+(27, 15, '../image/Screenshot 2024-11-08 234656.png', '2024-11-11 09:09:17'),
+(28, 16, '../image/Screenshot 2024-10-30 115555.png', '2024-11-11 09:10:32'),
+(29, 17, '../image/Screenshot 2024-10-27 034509.png', '2024-11-11 09:23:25'),
+(30, 17, '../image/Screenshot 2024-10-27 114300.png', '2024-11-11 09:23:25'),
+(31, 17, '../image/Screenshot 2024-10-27 114651.png', '2024-11-11 09:23:25'),
+(32, 17, '../image/Screenshot 2024-10-27 114740.png', '2024-11-11 09:23:25');
 
 -- --------------------------------------------------------
 
@@ -160,7 +167,7 @@ INSERT INTO `users` (`user_id`, `user_name`, `email`, `password`, `profile_image
 (8, 'amanifadhili', 'admin@gmail.com', '$2y$10$9W6/T60pEg.PZWWRpykWwODOJUSgSpLjqPGIaMnmXoSqM2fTVN6DC\n\n', 'IMG-20230727-WA00121.jpg', 'user'),
 (9, 'jules', 'jules@gmail.com', '$2y$10$6VT.XTP.OiNTiAiU28whI.nB1cDgMJEec7.WrK2YXQist.fJtD./O', 'WIN_20241010_11_10_42_Pro.jpg', 'user'),
 (10, 'admin', 'fadhiliamani200@gmail.com', '$2y$10$6VT.XTP.OiNTiAiU28whI.nB1cDgMJEec7.WrK2YXQist.fJtD./O', 'images.png', 'admin'),
-(11, 'fadhili amani', 'a.fadhiliprojects@gmail.com', '$2y$10$p.5EPsFmvE3GPlQ8rwJhp.Hr.lBafbuhTm1XC/aZTyftgyWCGqeQ.', 'Screenshot 2024-10-27 194033.png', 'user');
+(12, 'fadhili', 'a.fadhiliprojects@gmail.com', '$2y$10$rv.Gezd20d9Bm9zXNY//He5/wH7hHjsb6p7OfIHOqMW1mnXiif4hq', 'Screenshot 2024-10-27 194033.png', 'user');
 
 --
 -- Indexes for dumped tables
@@ -220,19 +227,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+  MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `l_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `l_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `problems`
 --
 ALTER TABLE `problems`
-  MODIFY `problem_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `problem_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `problem_categories`
@@ -244,13 +251,13 @@ ALTER TABLE `problem_categories`
 -- AUTO_INCREMENT for table `problem_images`
 --
 ALTER TABLE `problem_images`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
