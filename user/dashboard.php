@@ -112,6 +112,23 @@ function countReplies($conn, $comment_id) {
     .comments-section::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
+
+    /* Additional custom styles */
+.problem-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.problem-card:hover {
+    transform: translateY(-2px);
+}
+
+.comments-section {
+    max-height: 400px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
     </style>
 </head>
 
